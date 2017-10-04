@@ -1,2 +1,3 @@
-extern void initKeypad(void);
-extern char getKey(void);
+
+extern void initKeypad( void );
+extern char getKey( void );

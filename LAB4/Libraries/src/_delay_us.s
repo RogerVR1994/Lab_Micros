@@ -12,4 +12,3 @@ inner		SUBS r1, r1, #1
 			POP	 {r4, pc}
 			ENDP
 			END
-

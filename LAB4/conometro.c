@@ -13,22 +13,21 @@ int main( )
 	GPIOB->CRH |=0x00000400;
 	//GPIOB->CRH = ( GPIOB->CRH & ~ ( 0xF<<(4*(9-8)) ) ) | ( 0x4<<(4*(9-8)) );
 	
-	int contador=0;
-	char keypad;
-	int i,j,k,l,a,b,c,d;  //Define control variables
-	int reset =0;
+	__IO int contador=0;
+	__IO char keypad;
+	__IO int i,j,k,l,a,b,c,d;  //Define control variables
 	char screen[2][16];
 
 	lcdInit( );
 	initKeypad( );
 	
-	reset_variable: contador=0;
+	reset_variable:
+	contador=0;
 	sprintf( screen[0], "00:00" );
 
 	lcdGotoYX( 0, 0 );
 	lcdPrintLn( screen[0] );
 	lcdGotoYX( 0, 0 );
-	err: _delay_ms(100);
 	while(1)
 	{
 		keypad = getKey( );
@@ -58,10 +57,6 @@ int main( )
 			}
 		
 			else if (keypad!=' ' && keypad!='#' && keypad!='*' && contador!=2){ //If something different to ''#,'*' was pressed in keypad, and LCD position is different to 0,2
-				
-			if ((contador == 0 || contador ==3)&&(keypad=='6' || keypad == '7' || keypad == '8' || keypad == '9')){
-				goto err;
-			}
 			screen[0][contador]=keypad; //Read value in keypad and save in array position 0,var
 			lcdGotoYX( 0, 0 ); //Go to position 0,0 in LCD
 			lcdPrintLn(screen[0]); //Print array value in position 0
@@ -73,7 +68,6 @@ int main( )
 
 			
 		if(!(GPIOB->IDR & 0x200) & (((screen[0][0])!='0')|((screen[0][1])!='0')|((screen[0][2])!='0')|((screen[0][3])!='0'))){ //If some number was added to the LCD and start button was pressed, start counting
-			reset = 0;
 			a=screen[0][0]-48; //Save value position 0,0 in a, substract 48 because 0 in ASCII code
 			b=screen[0][1]-48; //Save value position 0,1 in b, substract 48 because 0 in ASCII code
 			c=screen[0][3]-48; //Save value position 0,3 in c, substract 48 because 0 in ASCII code
@@ -91,23 +85,16 @@ int main( )
 							lcdPrintLn(screen[0]); //Print "time" value in position 0
 							lcdGotoYX( 0, 0 ); //Go to position 0,0 in LCD					
 							if(!(GPIOB->IDR & 0x200)){ //Out if button was pressed
-								/*lcdGotoYX(0,0);
-								sprintf( screen[0], "00:00" );
-								lcdPrintLn(screen[0]);*/
-								goto reset_variable;
-								//Go to label salir
+								goto reset_variable; //Go to label salir
 							}
 						}
 						d=9; //Value 9 to fourth value in "00:00" when each cicle is over
 					}
 					c=5; //Value 5 to third value in "00:00" when each cicle is over 
 				}
-				b=9;
 			}
-			a=5;
 			lcdGotoYX( 0, 0 ); //Go to position 0,0 in LCD
 			contador=0; //Assign 0 to variable var
 		}
 	}
 }
-
