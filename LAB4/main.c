@@ -1,7 +1,5 @@
 #include <stm32f10x.h>
-
 #include <stdio.h>
-
 #include "delay.h"
 #include "lcd.h"
 #include "keypad.h"
@@ -34,15 +32,17 @@ int main( )
 		keypad = getKey( );
 		if(keypad == '#'){
 			if (contador<4){
-			contador++;}
+				contador++;
+			}
 			else{
 				lcdGotoYX( 0, 0 );
 				contador=0;
 			}
 			do{
 				keypad = getKey();
-			}while(keypad == '#'); 
-			lcdGotoYX( 0, contador );
+			}
+			while(keypad == '#'); 
+				lcdGotoYX( 0, contador );
 		}
 		else if(keypad == '*'){
 			if (contador>0){
@@ -53,11 +53,12 @@ int main( )
 			}
 			do{
 				keypad = getKey(); //Read and save value in keypad
-			}while(keypad == '*'); //Wait while '*' still being pressed
-			lcdGotoYX( 0, contador ); 
 			}
+			while(keypad == '*'); //Wait while '*' still being pressed
+				lcdGotoYX( 0, contador ); 
+		}
 		
-			else if (keypad!=' ' && keypad!='#' && keypad!='*' && contador!=2){ //If something different to ''#,'*' was pressed in keypad, and LCD position is different to 0,2
+		else if (keypad!=' ' && keypad!='#' && keypad!='*' && contador!=2){ //If something different to ''#,'*' was pressed in keypad, and LCD position is different to 0,2
 				
 			if ((contador == 0 || contador ==3)&&(keypad=='6' || keypad == '7' || keypad == '8' || keypad == '9')){
 				goto err;
@@ -68,7 +69,8 @@ int main( )
 			lcdGotoYX( 0, contador ); //Go to position 0,var in LCD
 			do{
 				keypad = getKey(); //Read and save value in keypad
-			}while(keypad!=' ' && keypad!='#' && keypad!='*' && contador!=2); //Wait while something diferent to '#','*'' still being pressed
+			}
+			while(keypad!=' ' && keypad!='#' && keypad!='*' && contador!=2); //Wait while something diferent to '#','*'' still being pressed
 		}
 
 			
